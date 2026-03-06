@@ -3,7 +3,7 @@
 namespace BitApps\Utils\HTTP\Controllers;
 
 // Prevent direct script access
-if (!defined('ABSPATH')) {
+if (!\defined('ABSPATH')) {
     exit;
 }
 
@@ -11,6 +11,7 @@ use Automatic_Upgrader_Skin;
 use BitApps\Utils\PluginCommonConfig;
 use BitApps\Utils\ProPluginUpdater;
 use Plugin_Upgrader;
+use stdClass;
 
 final class PluginUpdateController
 {
@@ -20,7 +21,19 @@ final class PluginUpdateController
 
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
+        include_once ABSPATH . 'wp-includes/update.php';
+
+        wp_update_plugins();
+
         $updatePlugins = get_site_transient('update_plugins');
+
+        if (!\is_object($updatePlugins)) {
+            $updatePlugins = new stdClass();
+        }
+
+        if (!isset($updatePlugins->response) || !\is_array($updatePlugins->response)) {
+            $updatePlugins->response = [];
+        }
 
         $pluginSlug = $this->getPluginSlug();
 
@@ -53,10 +66,12 @@ final class PluginUpdateController
 
         $freePluginSlug = PluginCommonConfig::getFreePluginSlug();
 
-        $updatePlugins = get_site_transient('update_plugins');
+        $pluginSlug = $freePluginSlug . '/' . $freePluginSlug . '.php';
 
-        if (isset($updatePlugins->response[$freePluginSlug . '/' . $freePluginSlug . '.php'])) {
-            $latestVersion = $updatePlugins->response[$freePluginSlug . '/' . $freePluginSlug . '.php']->new_version;
+        $updatedPlugins = get_site_transient('update_plugins');
+
+        if (\is_object($updatedPlugins) && isset($updatedPlugins->response[$pluginSlug])) {
+            $latestVersion = $updatedPlugins->response[$pluginSlug]->new_version;
         }
 
         return wp_send_json_success(
@@ -87,11 +102,32 @@ final class PluginUpdateController
 
     private function checkAndUpdateProPluginInCache($pluginSlug, $updatePlugins)
     {
-        if ($pluginSlug === PluginCommonConfig::getProPluginSlug() . '.php' && !isset($updatePlugins->response[$pluginSlug])) {
+        if (!\is_object($updatePlugins)) {
+            $updatePlugins = new stdClass();
+        }
+
+        if (!isset($updatePlugins->response) || !\is_array($updatePlugins->response)) {
+            $updatePlugins->response = [];
+        }
+
+        $proPluginSlug = PluginCommonConfig::getProPluginSlug();
+        $proPluginFile = $proPluginSlug . '/' . $proPluginSlug . '.php';
+
+        if ($pluginSlug === $proPluginFile && !isset($updatePlugins->response[$pluginSlug])) {
             $updatedPluginCache = (new ProPluginUpdater())->checkCacheData($updatePlugins);
             set_site_transient('update_plugins', $updatedPluginCache);
 
-            return get_site_transient('update_plugins');
+            $updatePlugins = get_site_transient('update_plugins');
+
+            if (!\is_object($updatePlugins)) {
+                $updatePlugins = new stdClass();
+            }
+
+            if (!isset($updatePlugins->response) || !\is_array($updatePlugins->response)) {
+                $updatePlugins->response = [];
+            }
+
+            return $updatePlugins;
         }
 
         return $updatePlugins;
