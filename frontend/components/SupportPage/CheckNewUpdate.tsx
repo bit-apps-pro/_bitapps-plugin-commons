@@ -1,6 +1,6 @@
 import { SyncOutlined } from '@ant-design/icons'
-import { __ } from '@wordpress/i18n'
 import config from '@config/config'
+import { __ } from '@wordpress/i18n'
 import { Space, theme, Tooltip } from 'antd'
 import { LuCircleCheck, LuInfo } from 'react-icons/lu'
 

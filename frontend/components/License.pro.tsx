@@ -1,7 +1,7 @@
-import { __ } from '@wordpress/i18n'
 import request from '@common/helpers/request'
 import config from '@config/config'
 import If from '@utilities/If'
+import { __ } from '@wordpress/i18n'
 import { Badge, Button, Space, Tag } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { useEffect, useRef } from 'react'

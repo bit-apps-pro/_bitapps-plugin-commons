@@ -1,5 +1,5 @@
-import { __, sprintf } from '@wordpress/i18n'
 import config from '@config/config'
+import { __, sprintf } from '@wordpress/i18n'
 import { Badge, Button } from 'antd'
 import Link from 'antd/es/typography/Link'
 import { LuDollarSign } from 'react-icons/lu'

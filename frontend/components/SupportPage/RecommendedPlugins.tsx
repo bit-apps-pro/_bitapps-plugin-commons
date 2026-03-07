@@ -1,6 +1,6 @@
-import { __ } from '@wordpress/i18n'
 import config from '@config/config'
 import { useQuery } from '@tanstack/react-query'
+import { __ } from '@wordpress/i18n'
 import { Avatar, Card, Flex, Skeleton, theme, Typography } from 'antd'
 import { useState } from 'react'
 import { LuMoveUpRight } from 'react-icons/lu'
