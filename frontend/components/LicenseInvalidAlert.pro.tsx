@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Alert } from 'antd'
 import { LuMoveUpRight } from 'react-icons/lu'
 import { Link } from 'react-router'
@@ -14,7 +14,7 @@ export default function LicenseInvalidAlert({ forceCheckLicense }: { forceCheckL
     <Alert
       action={
         <Link className="mt-2" to="/support">
-          {__('Manage license')}
+          {__('Manage license', 'bit-pi')}
           <LuMoveUpRight size={12} style={{ transform: 'translateY(-4px)' }} />
         </Link>
       }
@@ -23,7 +23,7 @@ export default function LicenseInvalidAlert({ forceCheckLicense }: { forceCheckL
           Using an outdated or unofficial license may leave your system vulnerable to security breaches and data leaks. 
           We cannot take responsibility for issues arising from such scenarios. For your safety, always download from the official Bit Apps server.`
       )}
-      message={__('Your license is invalid')}
+      message={__('Your license is invalid', 'bit-pi')}
       showIcon
       type="error"
     />

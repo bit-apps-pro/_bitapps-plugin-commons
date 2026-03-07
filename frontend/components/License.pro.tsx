@@ -1,12 +1,12 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import request from '@common/helpers/request'
 import config from '@config/config'
 import If from '@utilities/If'
-import { Badge, Button, Space, Tag, Typography } from 'antd'
+import { Badge, Button, Space, Tag } from 'antd'
 import Title from 'antd/es/typography/Title'
 import { useEffect, useRef } from 'react'
-import { LuBadgeCheck, LuCheck, LuCircleX, LuCrown } from 'react-icons/lu'
-import { useAsync, useSearchParam } from 'react-use'
+import { LuBadgeCheck, LuCircleX, LuCrown } from 'react-icons/lu'
+import { useSearchParam } from 'react-use'
 
 import LicenseActivationNotice from './LicenseActivationNotice.pro'
 import CheckNewUpdate from './SupportPage/CheckNewUpdate'
@@ -49,18 +49,6 @@ const getCurrentBuildCodeName = (): string | undefined => {
 export default function License({ pluginSlug }: { pluginSlug: string }) {
   const aboutPlugin = pluginInfo.plugins[pluginSlug as keyof typeof pluginInfo.plugins]
   const licenseKey = useRef(useSearchParam('licenseKey'))
-  const freeBuildCodeName = useAsync(async () => {
-    const res = await fetch(`/wp-content/plugins/${config.PLUGIN_SLUG}/assets/build-code-name.txt`)
-    const text = await res.text()
-    return text
-  })
-
-  const proBuildCodeName = useAsync(async () => {
-    const res = await fetch(`/wp-content/plugins/${config.PRO_SLUG}/assets/build-code-name.txt`)
-    const text = await res.text()
-    return text
-  })
-
   const currentBuildCodeName = getCurrentBuildCodeName()
 
   const {
@@ -105,32 +93,22 @@ export default function License({ pluginSlug }: { pluginSlug: string }) {
 
   return (
     <div className="mb-12">
-      <Title level={5}>{__('License & Activation')}</Title>
+      <Title level={5}>{__('License & Activation', 'bit-pi')}</Title>
 
       <If conditions={currentBuildCodeName === '.tsx'}>
         <Tag className="mb-2 font-bold" color="blue">
-          {__('Dev Version On')}
+          {__('Dev Version On', 'bit-pi')}
         </Tag>
       </If>
 
       <div className="mb-2">
-        {__('Version')}: {freeVersion}
-        <If conditions={[!freeBuildCodeName?.loading, !freeBuildCodeName?.value?.includes('<html')]}>
-          <Typography.Text className="ml-2 text-xs" type="secondary">
-            {__('Code Name: ')}
-
-            {freeBuildCodeName?.value}
-            <If conditions={freeBuildCodeName?.value === currentBuildCodeName}>
-              <LuCheck className="ml-1" />
-            </If>
-          </Typography.Text>
-        </If>
+        {__('Version', 'bit-pi')}: {freeVersion}
       </div>
       <If conditions={!hasProPlugin}>
         <div className="mb-2">
           <Space className="mb-2">
             <div>
-              {__('Pro Version')}: <b>{__('Not Activated')}</b>
+              {__('Pro Version', 'bit-pi')}: <b>{__('Not Activated', 'bit-pi')}</b>
             </div>
             <Badge dot>
               <Button
@@ -140,7 +118,7 @@ export default function License({ pluginSlug }: { pluginSlug: string }) {
                 target="_blank"
                 type="primary"
               >
-                {__('Buy Pro Version')}
+                {__('Buy Pro Version', 'bit-pi')}
               </Button>
             </Badge>
           </Space>
@@ -152,16 +130,7 @@ export default function License({ pluginSlug }: { pluginSlug: string }) {
       <If conditions={hasProPlugin}>
         <div className="mb-2">
           <div className="mb-2">
-            {__('Pro Version')}: {proVersion}{' '}
-            <If conditions={[!proBuildCodeName?.loading, !proBuildCodeName?.value?.includes('<html')]}>
-              <Typography.Text className="ml-2 text-xs" type="secondary">
-                {__('Code Name: ')}
-                {proBuildCodeName?.value}
-                <If conditions={proBuildCodeName?.value === currentBuildCodeName}>
-                  <LuCheck className="ml-1" />
-                </If>
-              </Typography.Text>
-            </If>
+            {__('Pro Version', 'bit-pi')}: {proVersion}
           </div>
 
           <CheckNewUpdate />
@@ -178,7 +147,7 @@ export default function License({ pluginSlug }: { pluginSlug: string }) {
                   size="large"
                   type="primary"
                 >
-                  {__('Deactivate License')}
+                  {__('Deactivate License', 'bit-pi')}
                 </Button>
 
                 <LicenseActivationNotice />
@@ -191,7 +160,7 @@ export default function License({ pluginSlug }: { pluginSlug: string }) {
                 size="large"
                 type="primary"
               >
-                {__('Activate License')}
+                {__('Activate License', 'bit-pi')}
               </Button>
             )}
           </div>

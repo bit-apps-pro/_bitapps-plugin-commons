@@ -1,5 +1,5 @@
 import { XOutlined } from '@ant-design/icons'
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Flex, theme, Typography } from 'antd'
 import React from 'react'
 import {
@@ -53,7 +53,7 @@ export default function SupportLinks({ pluginSlug }: { pluginSlug: string }) {
   ]
   return (
     <div className="mb-12">
-      <Title level={5}>{__('Support')} </Title>
+      <Title level={5}>{__('Support', 'bit-pi')} </Title>
 
       <div css={{ display: 'grid', gridTemplateColumns: '1fr 1fr' }}>
         {supportLinks.map(({ copyable, href, icon, text }) => (

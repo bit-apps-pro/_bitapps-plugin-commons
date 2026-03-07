@@ -1,5 +1,5 @@
 import { SyncOutlined } from '@ant-design/icons'
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import config from '@config/config'
 import { Space, theme, Tooltip } from 'antd'
 import { LuCircleCheck, LuInfo } from 'react-icons/lu'
@@ -19,7 +19,7 @@ export default function CheckNewUpdate() {
     return (
       <div className="mb-2">
         <Space>
-          <b>{__('Checking updates')}</b>
+          <b>{__('Checking updates', 'bit-pi')}</b>
           <SyncOutlined spin />
         </Space>
       </div>
@@ -31,7 +31,7 @@ export default function CheckNewUpdate() {
       <div className="mb-2">
         <Space>
           <b>
-            {__('New version available')} ({latestAvailableVersion})
+            {__('New version available', 'bit-pi')} ({latestAvailableVersion})
           </b>
           <Tooltip
             title={__(
@@ -51,7 +51,7 @@ export default function CheckNewUpdate() {
     return (
       <div className="mb-2">
         <Space>
-          <b>{config.PRODUCT_NAME + ' ' + __('is up to date')}</b>
+          <b>{config.PRODUCT_NAME + ' ' + __('is up to date', 'bit-pi')}</b>
           <LuCircleCheck color={token.green6} size="1rem" />
         </Space>
       </div>

@@ -1,5 +1,5 @@
-import { __ } from '@common/helpers/i18nWrap'
 import fbCommunityImg from '@plugin-commons/resources/img/fbCommunity.webp'
+import { __ } from '@wordpress/i18n'
 import { Button, Flex, theme, Typography } from 'antd'
 import { LuFacebook } from 'react-icons/lu'
 
@@ -48,16 +48,16 @@ export default function FacebookCommunityCard({ facebookCommunityLink }: FBCommu
         vertical
       >
         <Title level={3} style={{ color: 'white' }}>
-          {__('Join Our Facebook Community')}
+          {__('Join Our Facebook Community', 'bit-pi')}
         </Title>
         <p css={{ color: 'white', fontSize: 18 }}>
-          {__('Connect, share, and grow with like-minded individuals')}
+          {__('Connect, share, and grow with like-minded individuals', 'bit-pi')}
         </p>
       </Flex>
       <Flex css={{ marginBlock: 0 }} gap={15} justify="center" wrap>
-        <span className="whitespace-nowrap">🌟 {__('Exclusive Content')}</span>
-        <span className="whitespace-nowrap">💬 {__('Daily Discussion')}</span>
-        <span className="whitespace-nowrap">🎉 {__('Special Events')}</span>
+        <span className="whitespace-nowrap">🌟 {__('Exclusive Content', 'bit-pi')}</span>
+        <span className="whitespace-nowrap">💬 {__('Daily Discussion', 'bit-pi')}</span>
+        <span className="whitespace-nowrap">🎉 {__('Special Events', 'bit-pi')}</span>
       </Flex>
 
       <Button
@@ -74,7 +74,7 @@ export default function FacebookCommunityCard({ facebookCommunityLink }: FBCommu
         size="large"
         target="_blank"
       >
-        {__('Join Now')}
+        {__('Join Now', 'bit-pi')}
       </Button>
     </Flex>
   )

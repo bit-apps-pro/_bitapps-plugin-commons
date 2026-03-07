@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Col, Row, theme, Typography } from 'antd'
 import { type ReactNode } from 'react'
 
@@ -38,7 +38,7 @@ export default function SupportPage({
         <Col md={15} sm={24}>
           <div className="mb-12">
             <Title level={5}>
-              {__('About')} {aboutPlugin.title}
+              {__('About', 'bit-pi')} {aboutPlugin.title}
             </Title>
             <Paragraph style={{ color: token.colorTextSecondary }}>{aboutPlugin.description}</Paragraph>
           </div>

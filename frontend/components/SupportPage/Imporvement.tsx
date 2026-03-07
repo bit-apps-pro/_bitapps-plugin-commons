@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Checkbox, theme, Typography } from 'antd'
 import { type CheckboxChangeEvent } from 'antd/es/checkbox'
 
@@ -19,7 +19,7 @@ export default function Improvement() {
 
   return (
     <div className="mb-12">
-      <Title level={5}>{__('Improvement')} </Title>
+      <Title level={5}>{__('Improvement', 'bit-pi')} </Title>
       <Checkbox
         checked={tracking?.allowTracking}
         disabled={isTrackingLoading || isUpdatingTracking}
@@ -36,9 +36,9 @@ export default function Improvement() {
             target="_black"
             underline
           >
-            {__('Privacy Policy')}
+            {__('Privacy Policy', 'bit-pi')}
           </Link>{' '}
-          {__('for more information.')}
+          {__('for more information.', 'bit-pi')}
         </Text>
       </Checkbox>
     </div>

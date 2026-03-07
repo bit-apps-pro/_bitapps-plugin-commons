@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import config from '@config/config'
 import { useQuery } from '@tanstack/react-query'
 import { Avatar, Card, Flex, Skeleton, theme, Typography } from 'antd'
@@ -41,7 +41,7 @@ function RecommendedPlugins() {
 
   return (
     <>
-      <Title level={5}>{__('Recommended Plugins')}</Title>
+      <Title level={5}>{__('Recommended Plugins', 'bit-pi')}</Title>
 
       <Flex gap={15} wrap>
         {supportInfo?.pluginsList

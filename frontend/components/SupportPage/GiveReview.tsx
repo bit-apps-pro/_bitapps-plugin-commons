@@ -1,4 +1,4 @@
-import { __, sprintf } from '@common/helpers/i18nWrap'
+import { __, sprintf } from '@wordpress/i18n'
 import config from '@config/config'
 import { Badge, Button } from 'antd'
 import Link from 'antd/es/typography/Link'
@@ -24,7 +24,7 @@ export default function GiveReview({ pluginSlug }: { pluginSlug: string }) {
         color="geekblue"
         text={
           <span css={{ fontSize: 16, padding: 5 }}>
-            <LuDollarSign /> {__('Cash Back')}
+            <LuDollarSign /> {__('Cash Back', 'bit-pi')}
           </span>
         }
       >
@@ -36,13 +36,18 @@ export default function GiveReview({ pluginSlug }: { pluginSlug: string }) {
           }}
         >
           <h4 css={{ color: 'white!important' }}>
-            {__('Hi')} {SERVER_VARIABLES.loggedInUserName} , <span css={{ fontSize: 23 }}>👋</span>
+            {__('Hi', 'bit-pi')} {SERVER_VARIABLES.loggedInUserName} ,{' '}
+            <span css={{ fontSize: 23 }}>👋</span>
           </h4>
           <p css={{ color: '#ccccd5', fontSize: 16 }}>
-            {__('We want your feedback!')}{' '}
-            <Link href={aboutPlugin.reviewLink}>{__('Write a review')}</Link>
-            {sprintf(__("of your experience with %s, and we'll send you a"), config.PRODUCT_NAME)}
-            <b style={{ color: 'white' }}>{__('$10 Cash back')}</b> {__('to say thanks!')}
+            {__('We want your feedback!', 'bit-pi')}{' '}
+            <Link href={aboutPlugin.reviewLink}>{__('Write a review', 'bit-pi')}</Link>
+            {sprintf(
+              __("of your experience with %s, and we'll send you a", 'bit-pi'),
+              config.PRODUCT_NAME
+            )}
+            <b style={{ color: 'white' }}>{__('$10 Cash back', 'bit-pi')}</b>{' '}
+            {__('to say thanks!', 'bit-pi')}
             <br />
             {__(
               'To claim your cash back, simply reply to support with a screenshot or link of your review.'
@@ -64,7 +69,7 @@ export default function GiveReview({ pluginSlug }: { pluginSlug: string }) {
             target="_blank"
             type="primary"
           >
-            {__('Review Now')}
+            {__('Review Now', 'bit-pi')}
           </Button>
         </div>
       </Badge.Ribbon>

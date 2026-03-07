@@ -1,5 +1,5 @@
 /* eslint-disable translate-obj-prop/translate-obj-prop */
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 
 export default {
   chatLink: 'https://tawk.to/chat/60eac4b6d6e7610a49aab375/1faah0r3e',
@@ -8,7 +8,7 @@ export default {
   plugins: {
     'bit-pi': {
       buyLink: 'https://bit-flows.com/#pricing/',
-      description: 'Bit Flows - ' + __('Zapier Alternative in WordPress Unlimited Task.'),
+      description: 'Bit Flows - ' + __('Zapier Alternative in WordPress Unlimited Task.', 'bit-pi'),
       docLink: 'https://bit-flows.com/users-guide/',
       reviewLink: 'https://wordpress.org/support/plugin/bit-pi/reviews/',
       title: 'Bit Flows',

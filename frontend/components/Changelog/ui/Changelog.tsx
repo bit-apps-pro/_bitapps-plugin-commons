@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Button, Drawer } from 'antd'
 import { LuFileClock } from 'react-icons/lu'
 import { useToggle } from 'react-use'
@@ -27,7 +27,7 @@ export default function Changelog() {
         mask={false}
         onClose={handleClose}
         open={isOpen}
-        title={__('Changelog')}
+        title={__('Changelog', 'bit-pi')}
         width={500}
       >
         <ChangelogContent />

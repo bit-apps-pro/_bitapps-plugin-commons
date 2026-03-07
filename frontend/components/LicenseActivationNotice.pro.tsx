@@ -1,4 +1,4 @@
-import { __ } from '@common/helpers/i18nWrap'
+import { __ } from '@wordpress/i18n'
 import { Alert } from 'antd'
 
 import useCheckLicenseValidity from './SupportPage/data/useCheckLicenseValidity'
@@ -21,7 +21,7 @@ export default function LicenseActivationNotice() {
           )}
         </>
       }
-      message={__('Your license is invalid, try reactivate')}
+      message={__('Your license is invalid, try reactivate', 'bit-pi')}
       showIcon
       type="error"
     />

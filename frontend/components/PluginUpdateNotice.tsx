@@ -4,7 +4,7 @@
 */
 
 import { SyncOutlined } from '@ant-design/icons'
-import { __, sprintf } from '@common/helpers/i18nWrap'
+import { __, sprintf } from '@wordpress/i18n'
 import { Button } from 'antd'
 import { type CSSProperties } from 'react'
 import { useState } from 'react'
@@ -57,7 +57,9 @@ export default function PluginUpdateNotice() {
       }}
     >
       <div className="notice notice-warning">
-        <h4 className="mt-2">{sprintf(__('Plugin Update Required (%s)'), aboutPlugin.title)} </h4>
+        <h4 className="mt-2">
+          {sprintf(__('Plugin Update Required (%s)', 'bit-pi'), aboutPlugin.title)}{' '}
+        </h4>
         <p>
           {__(
             'Please update both Free and Pro plugins to the latest version. Keeping them the same is crucial to avoid potential issues.'
@@ -76,7 +78,7 @@ export default function PluginUpdateNotice() {
             marginBottom: 10
           }}
         >
-          {isLoadingUpdatePlugin ? __('Updating...') : __('Update Now')}
+          {isLoadingUpdatePlugin ? __('Updating...', 'bit-pi') : __('Update Now', 'bit-pi')}
         </Button>
 
         {updateResponse.status && (
