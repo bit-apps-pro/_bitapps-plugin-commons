@@ -3,7 +3,7 @@
 namespace BitApps\Utils\HTTP\Controllers;
 
 // Prevent direct script access
-if (!\defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
     exit;
 }
 
@@ -21,34 +21,30 @@ final class PluginUpdateController
 
         include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
 
-        include_once ABSPATH . 'wp-includes/update.php';
+        $pluginBaseName = $this->getUpdatePluginBaseName();
 
-        wp_update_plugins();
+        $updatePlugins = $this->normalizeUpdatePluginsCache(get_site_transient('update_plugins'));
 
-        $updatePlugins = get_site_transient('update_plugins');
+        if (!isset($updatePlugins->response[$pluginBaseName]) && $pluginBaseName === PluginCommonConfig::getFreePluginBaseName()) {
+            include_once ABSPATH . 'wp-includes/update.php';
+            wp_update_plugins();
 
-        if (!\is_object($updatePlugins)) {
-            $updatePlugins = new stdClass();
+            $updatePlugins = $this->normalizeUpdatePluginsCache(get_site_transient('update_plugins'));
         }
 
-        if (!isset($updatePlugins->response) || !\is_array($updatePlugins->response)) {
-            $updatePlugins->response = [];
-        }
 
-        $pluginSlug = $this->getPluginSlug();
+        $updatePlugins = $this->checkAndUpdateProPluginInCache($pluginBaseName, $updatePlugins);
 
-        $upgrader = (new Plugin_Upgrader(new Automatic_Upgrader_Skin()));
+        if (isset($updatePlugins->response[$pluginBaseName])) {
+            $upgrader = (new Plugin_Upgrader(new Automatic_Upgrader_Skin()));
 
-        $updatePlugins = $this->checkAndUpdateProPluginInCache($pluginSlug, $updatePlugins);
-
-        if (isset($updatePlugins->response[$pluginSlug])) {
-            $pluginUpgraded = $upgrader->upgrade($pluginSlug);
+            $pluginUpgraded = $upgrader->upgrade($pluginBaseName);
 
             if (is_wp_error($pluginUpgraded)) {
                 return 'Error updating plugin: ' . $pluginUpgraded->get_error_message();
             }
 
-            $pluginActivated = activate_plugin($pluginSlug);
+            $pluginActivated = activate_plugin($pluginBaseName);
 
             if (is_wp_error($pluginActivated)) {
                 return 'Plugin updated successfully! But failed to activate plugin.';
@@ -64,14 +60,12 @@ final class PluginUpdateController
     {
         $latestVersion = null;
 
-        $freePluginSlug = PluginCommonConfig::getFreePluginSlug();
+        $freePluginBaseName = PluginCommonConfig::getFreePluginBaseName();
 
-        $pluginSlug = $freePluginSlug . '/' . $freePluginSlug . '.php';
+        $updatedPlugins = $this->normalizeUpdatePluginsCache(get_site_transient('update_plugins'));
 
-        $updatedPlugins = get_site_transient('update_plugins');
-
-        if (\is_object($updatedPlugins) && isset($updatedPlugins->response[$pluginSlug])) {
-            $latestVersion = $updatedPlugins->response[$pluginSlug]->new_version;
+        if (isset($updatedPlugins->response[$freePluginBaseName])) {
+            $latestVersion = $updatedPlugins->response[$freePluginBaseName]->new_version;
         }
 
         return wp_send_json_success(
@@ -81,26 +75,36 @@ final class PluginUpdateController
         );
     }
 
-    private function getPluginSlug()
+    private function getUpdatePluginBaseName()
     {
-        $freePluginSlug = PluginCommonConfig::getFreePluginSlug();
-
-        $proPluginSlug = PluginCommonConfig::getProPluginSlug();
-
         $proPluginVersion = PluginCommonConfig::getProPluginVersion();
 
         $freePluginVersion = PluginCommonConfig::getFreePluginVersion();
 
         if ($proPluginVersion > $freePluginVersion) {
-            $pluginSlug = $freePluginSlug . '/' . $freePluginSlug . '.php';
-        } else {
-            $pluginSlug = $proPluginSlug . '/' . $proPluginSlug . '.php';
+            return PluginCommonConfig::getFreePluginBaseName();
         }
 
-        return $pluginSlug;
+        return PluginCommonConfig::getProPluginBaseName();
     }
 
-    private function checkAndUpdateProPluginInCache($pluginSlug, $updatePlugins)
+    private function checkAndUpdateProPluginInCache($pluginBaseName, $updatePlugins)
+    {
+        $updatePlugins = $this->normalizeUpdatePluginsCache($updatePlugins);
+
+        $proPluginBaseName = PluginCommonConfig::getProPluginBaseName();
+
+        if ($pluginBaseName === $proPluginBaseName && !isset($updatePlugins->response[$pluginBaseName])) {
+            $updatedPluginCache = (new ProPluginUpdater())->checkCacheData($updatePlugins);
+            set_site_transient('update_plugins', $updatedPluginCache);
+
+            return $this->normalizeUpdatePluginsCache(get_site_transient('update_plugins'));
+        }
+
+        return $updatePlugins;
+    }
+
+    private function normalizeUpdatePluginsCache($updatePlugins)
     {
         if (!\is_object($updatePlugins)) {
             $updatePlugins = new stdClass();
@@ -110,24 +114,12 @@ final class PluginUpdateController
             $updatePlugins->response = [];
         }
 
-        $proPluginSlug = PluginCommonConfig::getProPluginSlug();
-        $proPluginFile = $proPluginSlug . '/' . $proPluginSlug . '.php';
+        if (!isset($updatePlugins->no_update) || !\is_array($updatePlugins->no_update)) {
+            $updatePlugins->no_update = [];
+        }
 
-        if ($pluginSlug === $proPluginFile && !isset($updatePlugins->response[$pluginSlug])) {
-            $updatedPluginCache = (new ProPluginUpdater())->checkCacheData($updatePlugins);
-            set_site_transient('update_plugins', $updatedPluginCache);
-
-            $updatePlugins = get_site_transient('update_plugins');
-
-            if (!\is_object($updatePlugins)) {
-                $updatePlugins = new stdClass();
-            }
-
-            if (!isset($updatePlugins->response) || !\is_array($updatePlugins->response)) {
-                $updatePlugins->response = [];
-            }
-
-            return $updatePlugins;
+        if (!isset($updatePlugins->checked) || !\is_array($updatePlugins->checked)) {
+            $updatePlugins->checked = [];
         }
 
         return $updatePlugins;
