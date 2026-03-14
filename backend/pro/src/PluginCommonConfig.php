@@ -92,6 +92,16 @@ final class PluginCommonConfig
         return self::$proPluginSlug;
     }
 
+    public static function getFreePluginBaseName()
+    {
+        return self::$freePluginSlug . '/' . self::$freePluginSlug . '.php';
+    }
+
+    public static function getProPluginBaseName()
+    {
+        return self::$proPluginSlug . '/' . self::$proPluginSlug . '.php';
+    }
+
     public static function getFreePluginPrefix()
     {
         return self::$freePluginPrefix;
