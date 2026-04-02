@@ -2,6 +2,8 @@ import { __ } from '@common/helpers/i18nWrap'
 import { Col, Row, theme, Typography } from 'antd'
 import { type ReactNode } from 'react'
 
+import config from '@config/config'
+
 import Changelog from '../Changelog'
 import FacebookCommunityCard from '../FacebookCommunityCard'
 import License from '../License.pro'
@@ -22,7 +24,7 @@ interface SupportPageProps {
 
 export default function SupportPage({
   isCashBackVisible = true,
-  isTelemetryVisible = true,
+ isTelemetryVisible = config.IS_PRO_EXIST,
   logoComponent,
   pluginSlug
 }: SupportPageProps) {
