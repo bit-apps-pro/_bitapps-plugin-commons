@@ -1,5 +1,4 @@
 import { __ } from '@common/helpers/i18nWrap'
-import config from '@config/config'
 import { Col, Row, theme, Typography } from 'antd'
 import { type ReactNode } from 'react'
 
@@ -22,8 +21,8 @@ interface SupportPageProps {
 }
 
 export default function SupportPage({
-  isCashBackVisible = true,
- isTelemetryVisible = config.IS_PRO_EXIST,
+  isCashBackVisible = false,
+  isTelemetryVisible = false,
   logoComponent,
   pluginSlug
 }: SupportPageProps) {
