@@ -6,7 +6,7 @@ export default function useTrackingUpdate() {
 
   const { isPending, mutateAsync } = useMutation({
     mutationFn: (allowTracking: boolean) =>
-      request<{ allowTracking: boolean }>('plugin-improvement', { allowTracking }, undefined, 'POST'),
+      request<{ allowTracking: boolean }>('pro_plugin-improvement', { allowTracking }, undefined, 'POST'),
     mutationKey: ['update-tracking'],
     onSuccess: data => {
       if (data.status === 'success') {

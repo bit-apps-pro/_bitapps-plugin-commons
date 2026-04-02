@@ -10,6 +10,7 @@ import GiveReview from './GiveReview'
 import Improvement from './Imporvement'
 import RecommendedPlugins from './RecommendedPlugins'
 import SupportLinks from './SupportLinks'
+import config from '@config/config'
 
 const { Paragraph, Title } = Typography
 
@@ -22,7 +23,7 @@ interface SupportPageProps {
 
 export default function SupportPage({
   isCashBackVisible = true,
-  isTelemetryVisible = true,
+ isTelemetryVisible = config.IS_PRO_EXIST,
   logoComponent,
   pluginSlug
 }: SupportPageProps) {
