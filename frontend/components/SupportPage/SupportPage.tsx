@@ -2,6 +2,8 @@ import { __ } from '@common/helpers/i18nWrap'
 import { Col, Row, theme, Typography } from 'antd'
 import { type ReactNode } from 'react'
 
+import config from '@config/config'
+
 import Changelog from '../Changelog'
 import FacebookCommunityCard from '../FacebookCommunityCard'
 import License from '../License.pro'
@@ -10,7 +12,6 @@ import GiveReview from './GiveReview'
 import Improvement from './Imporvement'
 import RecommendedPlugins from './RecommendedPlugins'
 import SupportLinks from './SupportLinks'
-import config from '@config/config'
 
 const { Paragraph, Title } = Typography
 
