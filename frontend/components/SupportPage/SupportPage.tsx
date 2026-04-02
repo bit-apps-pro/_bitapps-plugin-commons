@@ -1,8 +1,7 @@
 import { __ } from '@common/helpers/i18nWrap'
+import config from '@config/config'
 import { Col, Row, theme, Typography } from 'antd'
 import { type ReactNode } from 'react'
-
-import config from '@config/config'
 
 import Changelog from '../Changelog'
 import FacebookCommunityCard from '../FacebookCommunityCard'
