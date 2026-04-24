@@ -2,28 +2,16 @@ import { type ReactNode } from 'react'
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-export default function Devtools({ jotai, reactQuery }: { jotai?: boolean; reactQuery?: boolean }) {
+export default function Devtools({ reactQuery }: { reactQuery?: boolean }) {
   const [DevtoolsComponents, setDevtoolsComponents] = useState<ReactNode | undefined>()
 
   useEffect(() => {
-    if (import.meta.env.DEV) {
-      Promise.all([
-        jotai ? import('jotai-devtools') : undefined,
-        reactQuery ? import('@tanstack/react-query-devtools') : undefined,
-        jotai ? import('jotai-devtools/styles.css') : undefined
-      ]).then(([jotaiDevtools, reactQueryDevtools]) => {
-        const DevelopmentToolsUI = (
-          <>
-            {jotai && jotaiDevtools ? <jotaiDevtools.DevTools position="bottom-right" /> : undefined}
-            {reactQuery && reactQueryDevtools ? (
-              <reactQueryDevtools.ReactQueryDevtools initialIsOpen={false} position="bottom" />
-            ) : undefined}
-          </>
-        )
-        setDevtoolsComponents(DevelopmentToolsUI)
+    if (import.meta.env.DEV && reactQuery) {
+      import('@tanstack/react-query-devtools').then(({ ReactQueryDevtools }) => {
+        setDevtoolsComponents(<ReactQueryDevtools initialIsOpen={false} position="bottom" />)
       })
     }
-  }, [jotai, reactQuery])
+  }, [reactQuery])
 
   if (!import.meta.env.DEV) return
 
