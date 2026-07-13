@@ -39,6 +39,8 @@ final class ProPluginUpdater
 
         $this->version = PluginCommonConfig::getProPluginVersion();
 
+        $this->freeVersion = PluginCommonConfig::getFreePluginVersion();
+
         $this->label = PluginCommonConfig::getFreePluginTitle() . ' Connect Wordpress Plugins And External Applications';
 
         $this->cacheKey = md5($this->slug . '_plugin_info');
@@ -200,10 +202,13 @@ final class ProPluginUpdater
             return $cacheData;
         }
 
-        if (!empty($this->freeVersion) && !empty($versionInfo->requiresFree)) {
-            if (version_compare($this->freeVersion, $versionInfo->requiresFree, '<')) {
-                return $cacheData;
-            }
+        $requiredFreeVersion = $versionInfo->requiresFree ?? null;
+
+        if (
+            !empty($requiredFreeVersion)
+            && version_compare($this->freeVersion, $requiredFreeVersion, '<')
+        ) {
+            return $cacheData;
         }
 
         if (version_compare($this->version, $versionInfo->version, '<')) {
