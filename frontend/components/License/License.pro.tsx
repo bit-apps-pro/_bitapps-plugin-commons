@@ -8,9 +8,9 @@ import { useEffect, useRef } from 'react'
 import { LuBadgeCheck, LuCheck, LuCircleX, LuCrown } from 'react-icons/lu'
 import { useAsync, useSearchParam } from 'react-use'
 
-import LicenseActivationNotice from './LicenseActivationNotice.pro'
-import CheckNewUpdate from './SupportPage/CheckNewUpdate'
-import pluginInfo from './SupportPage/data/pluginInfoData'
+import LicenseActivationNotice from '../LicenseActivationNotice.pro'
+import CheckNewUpdate from '../SupportPage/CheckNewUpdate'
+import pluginInfo from '../SupportPage/data/pluginInfoData'
 
 const SUBS_URL =
   `h_t_tps_:/_/subscription_.bitapps_.pro/wp/activateLicense/?slug=${config.PRO_SLUG}&redirect=${encodeURIComponent(window.location.href)}`.replaceAll(
@@ -33,7 +33,7 @@ const handleDeactivateLicense = async () => {
 const getCurrentBuildCodeName = (): string | undefined => {
   const scripts = [...document.scripts]
   for (const sc of scripts) {
-    if (sc.src.includes('bit-pi') && sc.src.includes('main')) {
+    if (sc.src.includes(config.PLUGIN_SLUG) && sc.src.includes('main')) {
       return sc?.src
         ?.split('/')
         ?.at(-1)
