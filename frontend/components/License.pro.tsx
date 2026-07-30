@@ -33,7 +33,7 @@ const handleDeactivateLicense = async () => {
 const getCurrentBuildCodeName = (): string | undefined => {
   const scripts = [...document.scripts]
   for (const sc of scripts) {
-    if (sc.src.includes('bit-pi') && sc.src.includes('main')) {
+    if (sc.src.includes(config.PLUGIN_SLUG) && sc.src.includes('main')) {
       return sc?.src
         ?.split('/')
         ?.at(-1)
