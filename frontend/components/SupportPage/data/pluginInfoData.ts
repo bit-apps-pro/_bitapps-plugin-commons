@@ -6,6 +6,17 @@ export default {
   facebookCommunity: 'https://www.facebook.com/groups/bitcommunityusers',
   linkedIn: 'https://www.linkedin.com/company/bitapps',
   plugins: {
+    'bit-crm-sales-marketing-automation': {
+      buyLink: 'https://bit-crm.com/#pricing/',
+      description: __(
+        'WordPress CRM to manage contacts, leads, deals, and invoices and run your whole sales pipeline right from your WordPress dashboard.'
+      ),
+      docLink: 'https://bitapps.pro/docs/bit-crm/',
+      reviewLink: 'https://wordpress.org/support/plugin/bit-crm-sales-marketing-automation/reviews/',
+      title: 'Bit CRM',
+      website: 'https://bit-crm.com/',
+      wpSupportThread: 'https://wordpress.org/support/plugin/bit-crm-sales-marketing-automation/'
+    },
     'bit-pi': {
       buyLink: 'https://bit-flows.com/#pricing/',
       description: 'Bit Flows - ' + __('Zapier Alternative in WordPress Unlimited Task.'),

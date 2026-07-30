@@ -3,10 +3,14 @@ import { BitAppsPluginUtilUpdateNotice } from './BitappsPluginUtilUpdateNotice'
 import LicenseInvalidAlert from './LicenseInvalidAlert.pro'
 import PluginUpdateNotice from './PluginUpdateNotice'
 
-export default function AllPluginEssentials() {
+export default function AllPluginEssentials({
+  licensePath
+}: {
+  licensePath?: string
+} = {}) {
   return (
     <div className="mr-2">
-      {isPro() && <LicenseInvalidAlert />}
+      {isPro() && <LicenseInvalidAlert to={licensePath} />}
       <PluginUpdateNotice />
       <BitAppsPluginUtilUpdateNotice />
     </div>
