@@ -4,7 +4,7 @@ import { type ReactNode } from 'react'
 
 import Changelog from '../Changelog'
 import FacebookCommunityCard from '../FacebookCommunityCard'
-import License from '../License'
+import License from '../License.pro'
 import pluginInfoData from './data/pluginInfoData'
 import GiveReview from './GiveReview'
 import Improvement from './Imporvement'
