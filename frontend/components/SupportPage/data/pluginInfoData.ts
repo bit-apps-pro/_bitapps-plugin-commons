@@ -7,7 +7,7 @@ export default {
   linkedIn: 'https://www.linkedin.com/company/bitapps',
   plugins: {
     'bit-crm-sales-marketing-automation': {
-      buyLink: 'https://bit-crm.com/#pricing/',
+      buyLink: 'https://bit-crm.com/pricing/',
       description: __(
         'WordPress CRM to manage contacts, leads, deals, and invoices and run your whole sales pipeline right from your WordPress dashboard.'
       ),
