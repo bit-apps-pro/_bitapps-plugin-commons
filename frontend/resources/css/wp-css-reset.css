@@ -144,10 +144,6 @@ input[type='search']:focus {
   line-height: 1 !important;
 }
 
-/* .media-modal-content .media-frame select.attachment-filters {
-  margin-top: 32px !important;
-} */
-
 .media-frame .search {
   margin: 32px 0 0 !important;
 }
