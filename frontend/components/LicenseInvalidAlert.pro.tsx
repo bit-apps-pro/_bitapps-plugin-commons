@@ -5,7 +5,13 @@ import { Link } from 'react-router'
 
 import useCheckLicenseValidity from './SupportPage/data/useCheckLicenseValidity'
 
-export default function LicenseInvalidAlert({ forceCheckLicense }: { forceCheckLicense?: boolean }) {
+export default function LicenseInvalidAlert({
+  forceCheckLicense,
+  to = '/support'
+}: {
+  forceCheckLicense?: boolean
+  to?: string
+}) {
   const { isLicenseValid } = useCheckLicenseValidity(forceCheckLicense)
 
   if (isLicenseValid) return
@@ -13,7 +19,7 @@ export default function LicenseInvalidAlert({ forceCheckLicense }: { forceCheckL
   return (
     <Alert
       action={
-        <Link className="mt-2" to="/support">
+        <Link className="mt-2" to={to}>
           {__('Manage license')}
           <LuMoveUpRight size={12} style={{ transform: 'translateY(-4px)' }} />
         </Link>
