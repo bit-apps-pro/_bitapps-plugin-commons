@@ -292,6 +292,8 @@ final class ProPluginUpdater
         if (is_wp_error($apiResponse)) {
             $formattedData->requires = '';
 
+            $formattedData->requires_php = '';
+
             $formattedData->tested = '';
 
             $formattedData->new_version = $this->version;
@@ -309,6 +311,10 @@ final class ProPluginUpdater
             return $formattedData;
         }
         $formattedData->requires = $apiResponse->requireWP;
+
+        // WordPress only blocks the update (and auto-update) on incompatible
+        // PHP when requires_php is present in the update payload.
+        $formattedData->requires_php = $apiResponse->requirePHP ?? '';
 
         $formattedData->tested = $apiResponse->tested;
 
