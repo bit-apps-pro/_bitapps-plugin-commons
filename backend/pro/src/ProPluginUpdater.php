@@ -19,6 +19,11 @@ final class ProPluginUpdater
 
     public const PLUGIN_AUTHOR = 'Bit Apps';
 
+    /**
+     * How close to expiry the licence has to be before the notice shows.
+     */
+    private const EXPIRY_NOTICE_DAYS = 25;
+
     private $name;
 
     private $slug;
@@ -50,8 +55,6 @@ final class ProPluginUpdater
         if ($this->isForceCheckRequest()) {
             $this->removeCache();
         }
-
-        add_action('admin_notices', [$this, 'licenseExpirationNotice']);
     }
 
     public function licenseExpirationNotice()
@@ -74,13 +77,15 @@ final class ProPluginUpdater
 
         $expireInDays = (strtotime($licenseData['expireIn']) - time()) / DAY_IN_SECONDS;
 
-        if ($expireInDays >= 25) {
+        if ($expireInDays >= self::EXPIRY_NOTICE_DAYS) {
             return;
         }
 
+        $pluginTitle = PluginCommonConfig::getFreePluginTitle();
+
         $notice = $expireInDays > 0
-            ? \sprintf('%s License will expire in %s days', (int) $expireInDays, PluginCommonConfig::getFreePluginTitle())
-            : \sprintf('%s License is expired', PluginCommonConfig::getFreePluginTitle());
+            ? \sprintf('%s License will expire in %s days', $pluginTitle, (int) $expireInDays)
+            : \sprintf('%s License is expired', $pluginTitle);
 
         $allowedTags = [
             'div' => [
@@ -251,6 +256,8 @@ final class ProPluginUpdater
         remove_action('after_plugin_row_' . $this->name, 'wp_plugin_update_row');
 
         add_action('after_plugin_row_' . $this->name, [$this, 'showUpdateInfo'], 10, 1);
+
+        add_action('admin_notices', [$this, 'licenseExpirationNotice']);
     }
 
     private function isForceCheckRequest()
