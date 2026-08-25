@@ -11,7 +11,7 @@ export default {
       description: __(
         'WordPress CRM to manage contacts, leads, deals, and invoices and run your whole sales pipeline right from your WordPress dashboard.'
       ),
-      docLink: 'https://bitapps.pro/docs/bit-crm/',
+      docLink: 'https://bit-crm.com/docs/',
       reviewLink: 'https://wordpress.org/support/plugin/bit-crm-sales-marketing-automation/reviews/',
       title: 'Bit CRM',
       website: 'https://bit-crm.com/',
