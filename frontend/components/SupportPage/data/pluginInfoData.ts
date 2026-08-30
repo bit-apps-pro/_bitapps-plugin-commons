@@ -6,6 +6,17 @@ export default {
   facebookCommunity: 'https://www.facebook.com/groups/bitcommunityusers',
   linkedIn: 'https://www.linkedin.com/company/bitapps',
   plugins: {
+    'bit-connect': {
+      buyLink: 'https://bitapps.pro/bit-connect/#pricing/',
+      description: __(
+        'A community forum for WordPress where users raise feature requests, report issues, send feedback and vote on what gets built next.'
+      ),
+      docLink: 'https://bitapps.pro/docs/bit-connect/',
+      reviewLink: 'https://wordpress.org/support/plugin/bit-connect/reviews/',
+      title: 'Bit Connect',
+      website: 'https://bitapps.pro/bit-connect/',
+      wpSupportThread: 'https://wordpress.org/support/plugin/bit-connect/'
+    },
     'bit-crm-sales-marketing-automation': {
       buyLink: 'https://bit-crm.com/pricing/',
       description: __(
