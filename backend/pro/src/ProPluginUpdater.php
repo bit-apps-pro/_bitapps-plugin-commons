@@ -19,6 +19,11 @@ final class ProPluginUpdater
 
     public const PLUGIN_AUTHOR = 'Bit Apps';
 
+    /**
+     * How close to expiry the licence has to be before the notice shows.
+     */
+    private const EXPIRY_NOTICE_DAYS = 25;
+
     private $name;
 
     private $slug;
@@ -47,9 +52,9 @@ final class ProPluginUpdater
 
         $this->registerHooks();
 
-        $this->removeCache();
-
-        add_action('admin_notices', [$this, 'licenseExpirationNotice']);
+        if ($this->isForceCheckRequest()) {
+            $this->removeCache();
+        }
     }
 
     public function licenseExpirationNotice()
@@ -58,49 +63,55 @@ final class ProPluginUpdater
             return;
         }
 
-        global $pageNow;
+        global $pagenow;
 
-        if ($pageNow !== 'plugins.php') {
+        if ($pagenow !== 'plugins.php') {
             return;
         }
 
         $licenseData = LicenseService::getLicenseData();
 
-        if (!empty($licenseData['expireIn'])) {
-            $expireInDays = (strtotime($licenseData['expireIn']) - time()) / DAY_IN_SECONDS;
+        if (empty($licenseData['expireIn'])) {
+            return;
+        }
 
-            $allowedTags = [
-                'div' => [
-                    'class' => [],
-                ],
-                'p' => [],
-            ];
+        $expireInDays = (strtotime($licenseData['expireIn']) - time()) / DAY_IN_SECONDS;
 
-            if ($expireInDays < 25) {
-                $notice = $expireInDays > 0
-                ? \sprintf('%s License will expire in %s days', (int) $expireInDays, PluginCommonConfig::getFreePluginTitle())
-                : \sprintf('%s License is expired', PluginCommonConfig::getFreePluginTitle());
+        if ($expireInDays >= self::EXPIRY_NOTICE_DAYS) {
+            return;
+        }
 
-                // phpcs:ignore
-                echo wp_kses(
-                    "<div class='notice notice-error is-dismissible'>
+        $pluginTitle = PluginCommonConfig::getFreePluginTitle();
+
+        $notice = $expireInDays > 0
+            ? \sprintf('%s License will expire in %s days', $pluginTitle, (int) $expireInDays)
+            : \sprintf('%s License is expired', $pluginTitle);
+
+        $allowedTags = [
+            'div' => [
+                'class' => [],
+            ],
+            'p' => [],
+        ];
+
+        // phpcs:ignore
+        echo wp_kses(
+            "<div class='notice notice-error is-dismissible'>
                 <p>{$notice}</p>
             </div>",
-                    $allowedTags
-                );
-            }
-        }
+            $allowedTags
+        );
     }
 
     public function checkUpdate($cacheData)
     {
-        global $pageNow;
+        global $pagenow;
 
         if (!\is_object($cacheData)) {
             $cacheData = new stdClass();
         }
 
-        if ($pageNow === 'plugins.php' && is_multisite()) {
+        if ($pagenow === 'plugins.php' && is_multisite()) {
             return $cacheData;
         }
 
@@ -163,11 +174,7 @@ final class ProPluginUpdater
 
     public function removeCache()
     {
-        global $pageNow;
-
-        if ($pageNow === 'update-core.php' && isset($_GET['force-check'])) {
-            delete_option(PluginCommonConfig::getProPluginPrefix() . $this->cacheKey);
-        }
+        delete_option($this->cacheOptionName());
     }
 
     public function checkCacheData($cacheData)
@@ -249,11 +256,26 @@ final class ProPluginUpdater
         remove_action('after_plugin_row_' . $this->name, 'wp_plugin_update_row');
 
         add_action('after_plugin_row_' . $this->name, [$this, 'showUpdateInfo'], 10, 1);
+
+        add_action('admin_notices', [$this, 'licenseExpirationNotice']);
+    }
+
+    private function isForceCheckRequest()
+    {
+        global $pagenow;
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return $pagenow === 'update-core.php' && isset($_GET['force-check']);
+    }
+
+    private function cacheOptionName()
+    {
+        return PluginCommonConfig::getProPluginPrefix() . $this->cacheKey;
     }
 
     private function getCache()
     {
-        $cacheData = get_option(PluginCommonConfig::getProPluginPrefix() . $this->cacheKey);
+        $cacheData = get_option($this->cacheOptionName());
 
         if (empty($cacheData['timeout']) || current_time('timestamp') > $cacheData['timeout']) {
             return false;
@@ -271,7 +293,7 @@ final class ProPluginUpdater
             'value'   => $cacheValue,
         ];
 
-        update_option(PluginCommonConfig::getProPluginPrefix() . $this->cacheKey, $data, 'no');
+        update_option($this->cacheOptionName(), $data, 'no');
     }
 
     private function formatApiResponse($apiResponse)
@@ -292,6 +314,8 @@ final class ProPluginUpdater
         if (is_wp_error($apiResponse)) {
             $formattedData->requires = '';
 
+            $formattedData->requires_php = '';
+
             $formattedData->tested = '';
 
             $formattedData->new_version = $this->version;
@@ -309,6 +333,10 @@ final class ProPluginUpdater
             return $formattedData;
         }
         $formattedData->requires = $apiResponse->requireWP;
+
+        // WordPress only blocks the update (and auto-update) on incompatible
+        // PHP when requires_php is present in the update payload.
+        $formattedData->requires_php = $apiResponse->requirePHP ?? '';
 
         $formattedData->tested = $apiResponse->tested;
 

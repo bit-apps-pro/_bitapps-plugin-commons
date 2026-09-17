@@ -45,7 +45,7 @@ export default function SupportPage({
 
           <License pluginSlug={pluginSlug} />
 
-          {isTelemetryVisible && <Improvement />}
+          {isTelemetryVisible && <Improvement pluginSlug={pluginSlug} />}
 
           <Changelog />
 
