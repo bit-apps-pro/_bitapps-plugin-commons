@@ -19,10 +19,16 @@ function layerStyle() {
 const testVariables = { assetsURL: ASSETS, pluginSlug: 'my-plugin' }
 interface Globals {
   SERVER_VARIABLES?: Record<string, unknown>
+  happyDOM?: { settings: { disableCSSFileLoading: boolean } }
 }
 let saved: Record<string, unknown> | undefined
 
 beforeEach(() => {
+  // happy-dom downloads each <link> the tests add, and logs a NetworkError for
+  // each one. The tests do not need the files, so stop the download.
+  const { happyDOM } = globalThis as Globals
+  if (happyDOM) happyDOM.settings.disableCSSFileLoading = true
+
   // A plugin's test setup may already define the global, and not let a test
   // redefine it. Change its fields then, and put them back after.
   const globals = globalThis as Globals
