@@ -18,8 +18,8 @@ function layerStyle() {
 
 const testVariables = { assetsURL: ASSETS, pluginSlug: 'my-plugin' }
 interface Globals {
-  SERVER_VARIABLES?: Record<string, unknown>
   happyDOM?: { settings: { disableCSSFileLoading: boolean } }
+  SERVER_VARIABLES?: Record<string, unknown>
 }
 let saved: Record<string, unknown> | undefined
 
@@ -42,6 +42,7 @@ beforeEach(() => {
 
 afterEach(() => {
   document.head.innerHTML = ''
+  Reflect.deleteProperty(document, 'styleSheets')
   const globals = globalThis as Globals
   const current = globals.SERVER_VARIABLES
   if (saved && current) {
@@ -61,10 +62,14 @@ describe('setCascadeLayerToWordpressStyles', () => {
     const href = 'https://example.test/wp-content/themes/astra/main.min.css'
     const link = addLink(href)
     // A browser lists a loaded <link> in document.styleSheets as well;
-    // happy-dom does not load it, so give the sheet by hand.
-    vi.spyOn(document, 'styleSheets', 'get').mockReturnValue([
-      { disabled: false, href, ownerNode: link }
-    ] as unknown as StyleSheetList)
+    // happy-dom does not load it, so give the sheet by hand. Do not use a
+    // getter spy here: vitest 2 does not restore it cleanly, and each later
+    // read of document.styleSheets then overflows the stack. afterEach
+    // deletes this own property.
+    Object.defineProperty(document, 'styleSheets', {
+      configurable: true,
+      value: [{ disabled: false, href, ownerNode: link }]
+    })
 
     setCascadeLayerToWordpressStyles('@layer wp, antd;')
 
